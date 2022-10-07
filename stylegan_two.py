@@ -19,7 +19,7 @@ from conv_mod import *
 im_size = 64
 latent_size = 512
 BATCH_SIZE = 6
-directory = "Pokemon2"
+directory = r"ham10000-melanoma"
 
 cha = 12
 
@@ -142,7 +142,7 @@ def from_rgb(inp, conc = None):
 
 class GAN(object):
 
-    def __init__(self, steps = 1, lr = 0.0001, decay = 0.00001):
+    def __init__(self, steps = 1, learning_rate = 0.0001, decay = 0.00001):
 
         #Models
         self.D = None
@@ -156,7 +156,7 @@ class GAN(object):
         self.AM = None
 
         #Config
-        self.LR = lr
+        self.learning_rate = learning_rate
         self.steps = steps
         self.beta = 0.999
 
@@ -164,8 +164,8 @@ class GAN(object):
         self.discriminator()
         self.generator()
 
-        self.GMO = Adam(lr = self.LR, beta_1 = 0, beta_2 = 0.999)
-        self.DMO = Adam(lr = self.LR, beta_1 = 0, beta_2 = 0.999)
+        self.GMO = Adam(learning_rate = self.learning_rate, beta_1 = 0, beta_2 = 0.999)
+        self.DMO = Adam(learning_rate = self.learning_rate, beta_1 = 0, beta_2 = 0.999)
 
         self.GE = clone_model(self.G)
         self.GE.set_weights(self.G.get_weights())
@@ -340,10 +340,10 @@ class GAN(object):
 
 class StyleGAN(object):
 
-    def __init__(self, steps = 1, lr = 0.0001, decay = 0.00001, silent = True):
+    def __init__(self, steps = 1, learning_rate = 0.0001, decay = 0.00001, silent = True):
 
         #Init GAN and Eval Models
-        self.GAN = GAN(steps = steps, lr = lr, decay = decay)
+        self.GAN = GAN(steps = steps, learning_rate = learning_rate, decay = decay)
         self.GAN.GenModel()
         self.GAN.GenModelA()
 
@@ -353,7 +353,7 @@ class StyleGAN(object):
         self.im = dataGenerator(directory, im_size, flip = True)
 
         #Set up variables
-        self.lastblip = time.clock()
+        self.lastblip = time.perf_counter()
 
         self.silent = silent
 
@@ -404,8 +404,8 @@ class StyleGAN(object):
             print("G:", np.array(b))
             print("PL:", self.pl_mean)
 
-            s = round((time.clock() - self.lastblip), 4)
-            self.lastblip = time.clock()
+            s = round((time.perf_counter() - self.lastblip), 4)
+            self.lastblip = time.perf_counter()
 
             steps_per_second = 100 / s
             steps_per_minute = steps_per_second * 60
@@ -618,13 +618,8 @@ class StyleGAN(object):
 
 
 
-
-
-
-
-
 if __name__ == "__main__":
-    model = StyleGAN(lr = 0.0001, silent = False)
+    model = StyleGAN(learning_rate = 0.0001, silent = False)
     model.GAN.steps = 1
 
     while model.GAN.steps < 1000001:

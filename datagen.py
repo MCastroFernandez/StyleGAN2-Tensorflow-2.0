@@ -25,11 +25,6 @@ def printProgressBar (iteration, total, prefix = '', suffix = '', decimals = 1, 
         print()
         print()
 
-
-
-
-
-
 class dataGenerator(object):
 
     def __init__(self, folder, im_size, mss = (1024 ** 3), flip = True, verbose = True):
@@ -48,7 +43,7 @@ class dataGenerator(object):
             print("Maximum Segment Size: ", self.segment_length)
 
         try:
-            os.mkdir("data/" + self.folder + "-npy-" + str(self.im_size))
+            os.mkdir("Data/" + self.folder + "-npy-" + str(self.im_size))
         except:
             self.load_from_npy(folder)
             return
@@ -63,7 +58,7 @@ class dataGenerator(object):
 
         names = []
 
-        for dirpath, dirnames, filenames in os.walk("data/" + folder):
+        for dirpath, dirnames, filenames in os.walk(os.path.join("Data", folder)):
             for filename in [f for f in filenames if (f.endswith(".jpg") or f.endswith(".png") or f.endswith(".JPEG"))]:
                 fname = os.path.join(dirpath, filename)
                 names.append(fname)
@@ -93,19 +88,19 @@ class dataGenerator(object):
             kn = kn + 1
 
             if kn >= self.segment_length:
-                np.save("data/" + folder + "-npy-" + str(self.im_size) + "/data-"+str(sn)+".npy", np.array(segment))
+                np.save(os.path.join("Data", folder + "-npy-" + str(self.im_size),"data-" + str(sn)+".npy"), np.array(segment))
 
                 segment = []
                 kn = 0
                 sn = sn + 1
 
 
-        np.save("data/" + folder + "-npy-" + str(self.im_size) + "/data-"+str(sn)+".npy", np.array(segment))
+        np.save(os.path.join("Data", folder + "-npy-" + str(self.im_size),"data-" + str(sn)+".npy"), np.array(segment))
 
 
     def load_from_npy(self, folder):
 
-        for dirpath, dirnames, filenames in os.walk("data/" + folder + "-npy-" + str(self.im_size)):
+        for dirpath, dirnames, filenames in os.walk(os.path.join("Data", folder + "-npy-" + str(self.im_size))):
             for filename in [f for f in filenames if f.endswith(".npy")]:
                 self.segments.append(os.path.join(dirpath, filename))
 

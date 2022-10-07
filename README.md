@@ -18,7 +18,7 @@ Lazy Regularization, Path Length Regularization, and can include larger networks
 ## Image Samples
 Trained on Landscapes for 3.48 million images (290k steps, batch size 12, channel coefficient 24):
 *To clarify, 3.48 million images were shown to the Discriminator, but the dataset consists of only ~14k images.
-Thus, of those 3.48 million images, most are repeats of already seen images.*
+Thus, of those 3.48 million images, most are repeats of alearning_rateeady seen images.*
 
 ![Teaser image](./landscapes3.png)
 
